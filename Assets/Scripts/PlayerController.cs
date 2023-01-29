@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +11,16 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
 
     private bool isGrounded;
+
+    public int score;
+
+    public TextMeshProUGUI scoreText;
+
+
+    private void Start()
+    {
+        scoreText.text = "Score: " + score.ToString();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -32,6 +44,11 @@ public class PlayerController : MonoBehaviour
             rig.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
         }
+
+        if(transform.position.y < -5)
+        {
+            GameOver();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -40,5 +57,18 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+    }
+
+    public void AddScore(int amount)
+    {
+        score += amount;
+        //update score text UI tbd
+        scoreText.text = "Score: " + score.ToString();
     }
 }
